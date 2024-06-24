@@ -1,0 +1,109 @@
+@font-face {
+    font-family: 'Chakra Petch';
+    src: url('./ChakraPetch-Regular.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+:root {
+    --brunswick-green: #344E41;
+    --hunter-green: #3a5a40;
+    --fern-green: #588157;
+    --sage: #A3B18A;
+    --timberwolf: #DAD7CD;
+
+    --red: #EF233C;
+    --amber: #FFBE0B;
+    --green: #6A994E;
+
+    font-family: 'Chakra Petch';
+}
+
+body {
+    display: grid;
+    grid-template: [start] .25fr 3fr .5fr [end] / [start] 1fr 4fr [end];
+    height: 100vh;
+    margin: 0;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    grid-area: start / start / start / end;
+    background-color: var(--sage);
+    border-bottom: 8px solid var(--brunswick-green);
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    grid-area: 2 / 1 / end / 2;
+    background-color: var(--sage);
+}
+
+.side-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+}
+
+button {
+    font-family: 'Chakra Petch';
+    border: none;
+}
+
+.task-filter-btn {
+    background-color: var(--sage);
+}
+
+.task-filter-btn:hover {
+    background-color: var(--fern-green);
+}
+
+.add-btn {
+    background-color: var(--timberwolf);
+    border-radius: 4px;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.add-btn:hover {
+    background-color: var(--hunter-green);
+}
+
+.content {
+    grid-area: 2 / 2 / end / 2;
+    background-color: var(--timberwolf);
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    grid-area: end / start / end /end;
+    background-color: var(--timberwolf);
+    padding: 5px;
+}
+
+.github-logo {
+    font-size: 3rem;
+    margin-left: 1rem;
+    transition: transform 1s;
+}
+
+a {
+    color: inherit;
+}
+
+.github-logo:hover {
+    transform: rotate(1turn);
+}
