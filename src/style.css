@@ -67,8 +67,8 @@ button {
     background-color: var(--fern-green);
 }
 
-.add-btn {
-    background-color: var(--timberwolf);
+.add-project-btn,
+.add-task-btn {
     border-radius: 4px;
     padding-left: 50px;
     padding-right: 50px;
@@ -76,7 +76,16 @@ button {
     padding-bottom: 10px;
 }
 
-.add-btn:hover {
+.add-project-btn {
+    background-color: var(--timberwolf);
+}
+
+.add-task-btn {
+    background-color: white;
+}
+
+.add-project-btn:hover,
+.add-task-btn:hover {
     background-color: var(--hunter-green);
 }
 
@@ -90,18 +99,67 @@ button {
     gap: 2vh;
 }
 
-.to-do-card {
+.content-header {
+    margin-top: 2vh;
+    font-size: 2rem;
+}
+
+.task-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 2vh;
+    width: 80%;
+    padding: 20px 30px;
+    margin-top: 2vh;
+    border: 2px solid;
+    border-left: 16px solid;
+    border-radius: 4px;
+    gap: 10px;
+}
+
+.task-content {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+}
+
+
+.task-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1vw;
+}
+
+.task-title,
+.task-description {
+    align-self: center;
+}
+
+.task-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+
+.task-footer>div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     justify-content: center;
-    height: 5vh;
-    width: 80%;
-    padding: 5px 30px;
-    margin-top: 2vh;
-    border: 2px solid;
-    border-left: 8px solid;
-    border-right: 8px solid
+    gap: 10px;
+}
+
+.task-date {
+    border: 2px solid black;
+    border-radius: 4px;
+    padding: 2px 4px;
 }
 
 .high {
@@ -116,12 +174,16 @@ button {
     border-color: var(--green);
 }
 
-.card-title {
+.task-title {
     font-weight: bold;
 }
 
-.card-description {
+.task-description {
     font-style: italic;
+}
+
+img {
+    height: 1rem;
 }
 
 footer {
