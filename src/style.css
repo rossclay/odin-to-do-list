@@ -1,211 +1,210 @@
 @font-face {
-    font-family: 'Chakra Petch';
-    src: url('./ChakraPetch-Regular.ttf') format('truetype');
-    font-weight: 900;
-    font-style: normal;
+  font-family: "Chakra Petch";
+  src: url("./ChakraPetch-Regular.ttf") format("truetype");
+  font-weight: 900;
+  font-style: normal;
 }
 
 :root {
-    --brunswick-green: #344E41;
-    --hunter-green: #3a5a40;
-    --fern-green: #588157;
-    --sage: #A3B18A;
-    --timberwolf: #DAD7CD;
+  --brunswick-green: #344e41;
+  --hunter-green: #3a5a40;
+  --fern-green: #588157;
+  --sage: #a3b18a;
+  --timberwolf: #dad7cd;
 
-    --red: #EF233C;
-    --amber: #FFBE0B;
-    --green: #6A994E;
+  --red: #ef233c;
+  --amber: #ffbe0b;
+  --green: #6a994e;
 
-    font-family: 'Chakra Petch';
+  font-family: "Chakra Petch";
 }
 
 body {
-    display: grid;
-    grid-template: [start] .25fr 3fr .5fr [end] / [start] 1fr 4fr [end];
-    height: 100vh;
-    margin: 0;
+  display: grid;
+  grid-template: [start] 0.25fr 3fr 0.5fr [end] / [start] 1fr 4fr [end];
+  height: 100vh;
+  margin: 0;
 }
 
 header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    justify-items: center;
-    grid-area: start / start / start / end;
-    background-color: var(--sage);
-    border-bottom: 8px solid var(--brunswick-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  grid-area: start / start / start / end;
+  background-color: var(--sage);
+  border-bottom: 8px solid var(--brunswick-green);
 }
 
 .sidebar {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 10px;
-    grid-area: 2 / 1 / end / 2;
-    background-color: var(--sage);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  grid-area: 2 / 1 / end / 2;
+  background-color: var(--sage);
 }
 
 .side-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
 }
 
 button {
-    font-family: 'Chakra Petch';
-    border: none;
+  font-family: "Chakra Petch";
+  border: none;
 }
 
 .task-filter-btn {
-    background-color: var(--sage);
-    margin-top: 4px;
+  background-color: var(--sage);
+  margin-top: 4px;
 }
 
 .task-filter-btn:hover {
-    background-color: var(--fern-green);
+  background-color: var(--fern-green);
 }
 
 .add-project-btn,
 .add-task-btn {
-    border-radius: 4px;
-    padding-left: 50px;
-    padding-right: 50px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+  border-radius: 4px;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .add-project-btn {
-    background-color: var(--timberwolf);
+  background-color: var(--timberwolf);
 }
 
 .add-task-btn {
-    background-color: white;
+  background-color: white;
 }
 
 .add-project-btn:hover,
 .add-task-btn:hover {
-    background-color: var(--hunter-green);
+  background-color: var(--hunter-green);
 }
 
 .content {
-    grid-area: 2 / 2 / end / 2;
-    background-color: var(--timberwolf);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 2vh;
+  grid-area: 2 / 2 / end / 2;
+  background-color: var(--timberwolf);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2vh;
 }
 
 .content-header {
-    margin-top: 2vh;
-    font-size: 2rem;
+  margin-top: 2vh;
+  font-size: 2rem;
 }
 
 .task-card {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    height: 2vh;
-    width: 80%;
-    padding: 20px 30px;
-    margin-top: 2vh;
-    border: 2px solid;
-    border-left: 16px solid;
-    border-radius: 4px;
-    gap: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 2vh;
+  width: 80%;
+  padding: 20px 30px;
+  margin-top: 2vh;
+  border: 2px solid;
+  border-left: 16px solid;
+  border-radius: 4px;
+  gap: 10px;
 }
 
 .task-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-
 .task-header {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 1vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1vw;
 }
 
 .task-title,
 .task-description {
-    align-self: center;
+  align-self: center;
 }
 
 .task-footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    gap: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
-
 .task-footer>div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .task-date {
-    border: 2px solid black;
-    border-radius: 4px;
-    padding: 2px 4px;
+  border: 2px solid black;
+  border-radius: 4px;
+  padding: 2px 4px;
 }
 
 .high {
-    border-color: var(--red);
+  border-color: var(--red);
 }
 
 .medium {
-    border-color: var(--amber);
+  border-color: var(--amber);
 }
 
 .low {
-    border-color: var(--green);
+  border-color: var(--green);
 }
 
 .task-title {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .task-description {
-    font-style: italic;
+  font-style: italic;
 }
 
 img {
-    height: 1rem;
+  height: 1rem;
 }
 
 footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    justify-items: center;
-    grid-area: end / start / end /end;
-    background-color: var(--timberwolf);
-    padding: 5px;
+  display: flex;
+  height: 8vh;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  grid-area: end / start / end / end;
+  background-color: var(--timberwolf);
+  padding: 5px;
 }
 
 .github-logo {
-    font-size: 3rem;
-    margin-left: 1rem;
-    transition: transform 1s;
+  font-size: 3rem;
+  margin-left: 1rem;
+  transition: transform 1s;
 }
 
 a {
-    color: inherit;
+  color: inherit;
 }
 
 .github-logo:hover {
-    transform: rotate(1turn);
+  transform: rotate(1turn);
 }
