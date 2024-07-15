@@ -16,7 +16,10 @@
   --amber: #ffbe0b;
   --green: #6a994e;
 
+  --header-footer-border: 8px solid var(--brunswick-green);
+
   font-family: "Chakra Petch";
+
 }
 
 body {
@@ -33,7 +36,7 @@ header {
   justify-items: center;
   grid-area: start / start / start / end;
   background-color: var(--sage);
-  border-bottom: 8px solid var(--brunswick-green);
+  border-bottom: var(--header-footer-border)
 }
 
 .sidebar {
@@ -186,7 +189,8 @@ img {
 
 footer {
   display: flex;
-  height: 8vh;
+  border-top: var(--header-footer-border);
+  height: 5vh;
   align-items: center;
   justify-content: center;
   justify-items: center;
