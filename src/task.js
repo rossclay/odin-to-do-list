@@ -1,11 +1,20 @@
 import { parse, format, isValid } from 'date-fns'
+import { saveToLocalStorage, loadFromLocalStorage } from "./storage";
+
+let projects = []
+
+let allTasksView = false
+
+const checkAllTasksView = () => allTasksView
 
 class Task {
     constructor(title, description, dueDate, priority) {
         this.title = title
         this.description = description
-        this.dueDate = dueDate
+        this.dueDate = this.formatDate(dueDate)
         this.priority = priority
+        this.complete = false
+        this.id = Date.now().toString()
     }
 
     formatDate(date) {
@@ -77,11 +86,55 @@ class Project {
         }
 
     }
+
+    toJSON() {
+        return {
+            id: this.id,
+            name: this.name,
+            taskList: this.taskList.map(task => task.toJSON())
+        };
+    }
+
+
+}
+
+projects = loadFromLocalStorage(Project)
+
+const addTaskToProject = (projectID, task) => {
+    const project = getProject(projectID)
+    project.addTask(task)
+    saveToLocalStorage(projects)
+}
+
+const deleteTaskFromProject = (projectID, task) => {
+    const project = getProject(projectID)
+    project.removeTask(task)
+    saveToLocalStorage(projects)
 }
 
 const createProject = (name) => {
     const myProject = new Project(name)
-
+    projects.push(myProject)
+    saveToLocalStorage(projects)
 }
 
-export default { createTask, Task, createProject, Project };
+const deleteProject = (projectID) => {
+    const index = getProjectIndex(projectID)
+    if (index !== -1) {
+        lists.splice(index, 1)
+        saveToLocalStorage(lists)
+    }
+}
+
+const getProjectIndex = (projectID) => {
+    projects.findIndex((project) => project.id === projectID)
+}
+const getProject = (projectID) => projects.find((project) => project.id === projectID)
+
+const getCurrentProject = () => projects.find((project) => project.selected)
+
+const setAllTasksView = (state) => allTasksView = state
+
+const getProjectForTask = (task) => projects.find(project => project.taskList)
+
+export default { createTask, Task, createProject, Project, projects, createProject, deleteProject, addTaskToProject, deleteTaskFromProject, getProject, getCurrentProject, getProjectForTask, setAllTasksView, checkAllTasksView };
