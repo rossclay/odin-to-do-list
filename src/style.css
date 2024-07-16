@@ -19,7 +19,6 @@
   --header-footer-border: 8px solid var(--brunswick-green);
 
   font-family: "Chakra Petch";
-
 }
 
 body {
@@ -36,7 +35,7 @@ header {
   justify-items: center;
   grid-area: start / start / start / end;
   background-color: var(--sage);
-  border-bottom: var(--header-footer-border)
+  border-bottom: var(--header-footer-border);
 }
 
 .sidebar {
@@ -149,7 +148,7 @@ button {
   gap: 10px;
 }
 
-.task-footer>div {
+.task-footer > div {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -186,6 +185,79 @@ button {
 img {
   height: 1rem;
 }
+
+/* task modal styling */
+
+.task-input {
+  background-color: #ffffff;
+  border: 1px solid #d6d9dc;
+  border-radius: 3px;
+  width: 100%;
+  padding: 7px;
+  font-size: 14px;
+}
+
+.task-input[type="text"]:invalid {
+  border: 1px solid #d55c5f;
+  box-shadow: none;
+}
+
+.task-input:focus,
+.task-input:invalid:focus {
+  outline: none;
+  border: 1px solid #4f89d4;
+}
+
+.task-input[type="text"]:valid {
+  border: 1px solid green;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--half-card-padding);
+  border: none;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-item {
+  display: flex;
+  text-wrap: nowrap;
+  align-items: center;
+  align-self: flex-end;
+  justify-content: flex-start;
+  gap: var(--half-card-padding);
+}
+
+.task-modal {
+  width: 25vw;
+  height: fit-content;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -150px;
+  margin-top: -150px;
+  padding: 20px;
+}
+
+.submit-modal-btn,
+.close-modal {
+  padding: 4px;
+}
+
+legend {
+  text-align: center;
+  padding: 16px;
+}
+
+/* footer styling */
 
 footer {
   display: flex;
