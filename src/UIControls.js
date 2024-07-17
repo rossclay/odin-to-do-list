@@ -11,6 +11,7 @@ const UIController = () => {
   const closeBtn = document.querySelector(".close-modal");
   const taskModal = document.querySelector(".task-modal");
   const submitModalBtn = document.querySelector(".submit-modal-btn");
+  const content = document.querySelector(".content");
 
   addTaskBtn.addEventListener("click", () => taskModal.showModal());
 
@@ -33,8 +34,9 @@ const UIController = () => {
     );
     // need to rework these from the library project to make it work here
     addTaskToProject(newTask);
-    // resetLibrary(cardContainer);
-    // displayBooks(myLibrary);
+    // need to create functions related to displaying tasks and reset projects?
+    resetProjects(content);
+    displayTasks(myProjects);
     taskModal.close();
   });
   // additional feature for closing modal when clicking outside of dialog window
@@ -49,11 +51,31 @@ const UIController = () => {
       taskModal.close();
     }
   });
-};
 
-const isTaskComplete = () => {
-  if (document.querySelector(".task-checkbox").checked) return true;
-  else return false;
+  // responsive task cards: strike through tasks once they are complete
+
+  const strikeThruCompleteTasks = (existingTaskInformationHTML) => {
+    if (isTaskComplete) {
+      let newTaskInformationHTML = "<s>" + existingTaskInformationHTML + "<s>";
+      return newTaskInformationHTML;
+    }
+  };
+
+  const isTaskComplete = (event) => {
+    if (event.target.checked) return true;
+    else return false;
+  };
+
+  const taskBoxes = document.querySelectorAll("task-checkbox");
+  // use forEach to add an event listener to all of these
+  taskBoxes.forEach((taskBox) =>
+    taskBox.addEventListener("click", (event) => {
+      let existingTaskInformationHTML = event.target.innerHTML;
+      event.target.innerHTML = strikeThruCompleteTasks(
+        existingTaskInformationHTML
+      );
+    })
+  );
 };
 
 export default { UIController };
