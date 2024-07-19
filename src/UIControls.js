@@ -1,11 +1,11 @@
-import { format } from "date-fns";
+import { format, transpose } from "date-fns";
 import { saveToLocalStorage } from "./storage";
+import writeImgSrc from "./img/icons8-write-48.png"
+import trashImgSrc from "./img/icons8-trash-24.png"
 import taskModule from "./task.js";
 
-let isProjectFormOpen = false;
-let isTaskModalOpen = false;
 
-const UIController = () => {
+const UIController = (() => {
   // modal to allow the user to add tasks
   const addTaskBtn = document.querySelector(".add-task-btn");
   const closeBtn = document.querySelector(".close-modal");
@@ -56,26 +56,37 @@ const UIController = () => {
 
   const strikeThruCompleteTasks = (existingTaskInformationHTML) => {
     if (isTaskComplete) {
+      console.log('is any of this happening?')
       let newTaskInformationHTML = "<s>" + existingTaskInformationHTML + "<s>";
       return newTaskInformationHTML;
     }
   };
 
   const isTaskComplete = (event) => {
+    console.log(event.target.checked)
     if (event.target.checked) return true;
     else return false;
   };
 
-  const taskBoxes = document.querySelectorAll("task-checkbox");
+  const taskBoxes = document.querySelectorAll(".task-checkbox");
   // use forEach to add an event listener to all of these
   taskBoxes.forEach((taskBox) =>
     taskBox.addEventListener("click", (event) => {
       let existingTaskInformationHTML = event.target.innerHTML;
+      console.log(existingTaskInformationHTML)
       event.target.innerHTML = strikeThruCompleteTasks(
         existingTaskInformationHTML
       );
     })
   );
-};
+
+  const writeImgs = document.querySelectorAll('.img-write')
+  writeImgs.forEach((image) =>
+    image.src = writeImgSrc)
+  const trashImgs = document.querySelectorAll('.img-trash')
+  trashImgs.forEach((image) =>
+    image.src = trashImgSrc)
+
+})();
 
 export default { UIController };
