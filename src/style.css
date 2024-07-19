@@ -18,6 +18,9 @@
 
   --header-footer-border: 8px solid var(--brunswick-green);
 
+  --card-padding: 24px;
+  --half-card-padding: 12px;
+
   font-family: "Chakra Petch";
 }
 
@@ -65,12 +68,22 @@ button {
   margin-top: 4px;
 }
 
-.task-filter-btn:hover {
+
+.submit-modal-btn,
+.close-modal {
+  padding: 4px;
+}
+
+.task-filter-btn:hover,
+.submit-modal-btn:hover,
+.close-modal:hover {
   background-color: var(--fern-green);
 }
 
 .add-project-btn,
-.add-task-btn {
+.add-task-btn,
+.submit-modal-btn,
+.close-modal {
   border-radius: 4px;
   padding-left: 50px;
   padding-right: 50px;
@@ -148,7 +161,7 @@ button {
   gap: 10px;
 }
 
-.task-footer > div {
+.task-footer>div {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -245,11 +258,6 @@ fieldset {
   margin-left: -150px;
   margin-top: -150px;
   padding: 20px;
-}
-
-.submit-modal-btn,
-.close-modal {
-  padding: 4px;
 }
 
 legend {
