@@ -1,127 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>To-Do List</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
 
-  <body>
-    <header>Your To-Do List</header>
-    <div class="sidebar">
-      <div class="side-card">
-        <button class="task-filter-btn">today</button>
-        <button class="task-filter-btn">all tasks</button>
-        <button class="task-filter-btn">important tasks</button>
-      </div>
-      <div class="side-project">
-        <button class="add-project-btn">Add Project</button>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-Do List</title>
+</head>
+
+<body>
+  <header>Your To-Do List</header>
+  <div class="sidebar">
+    <div class="side-card">
+      <button class="task-filter-btn">today</button>
+      <button class="task-filter-btn">all tasks</button>
+      <button class="task-filter-btn">important tasks</button>
     </div>
-    <div class="content">
-      <div class="content-header">Your Tasks</div>
-      <button class="add-task-btn">Add task</button>
-      <div class="task-card low">
-        <div class="task-header">
-          <input type="checkbox" class="task-checkbox" />
-          <div class="task-content">
-            <div class="task-title">do normal thing</div>
-            <div class="task-description">thing description</div>
-          </div>
-        </div>
-        <div class="task-footer">
-          <div class="task-date">06/26/2025</div>
-          <div>
-            <img src="./img/icons8-write-48.png" /><img
-              src="./img/icons8-trash-24.png"
-            />
-          </div>
+    <div class="side-project">
+      <button class="add-project-btn">Add Project</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content-header">Your Tasks</div>
+    <button class="add-task-btn">Add task</button>
+    <div class="task-card low">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" name="task-checkbox" />
+        <div class="task-content">
+          <div class="task-title">do normal thing</div>
+          <div class="task-description">thing description</div>
         </div>
       </div>
-      <div class="task-card high">
-        <div class="task-header">
-          <input type="checkbox" class="task-checkbox" checked />
-          <div class="task-content">
-            <s>
-              <div class="task-title">do highly important thing</div>
-              <div class="task-description">
-                highly important thing description
-              </div>
-            </s>
-          </div>
-        </div>
-        <div class="task-footer">
-          <div class="task-date">06/26/2025</div>
-          <div>
-            <img src="./img/icons8-write-48.png" /><img
-              src="./img/icons8-trash-24.png"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="task-card medium">
-        <div class="task-header">
-          <input type="checkbox" class="task-checkbox" />
-          <div class="task-content">
-            <div class="task-title">do medium important thing</div>
-          </div>
-        </div>
-        <div class="task-footer">
-          <div class="task-date">06/26/2025</div>
-          <div>
-            <img src="./img/icons8-write-48.png" /><img
-              src="./img/icons8-trash-24.png"
-            />
-          </div>
+      <div class="task-footer">
+        <div class="task-date">06/26/2025</div>
+        <div>
+          <img class="img-write" /><img class="img-trash" />
         </div>
       </div>
     </div>
-
-    <dialog class='task-modal'>
-        <fieldset>
-            <legend>Task Information</legend>
-            <div class="form-container">
-            <div class="form-item">
-                <label for="task-title">Task Title <span aria-label="required">*</span></label>
-                <input class="task-input" type="text" id="task-title" name="task-title" placeholder="Daily Exercise" required>
+    <div class="task-card high">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" name="task-checkbox" checked />
+        <div class="task-content">
+          <s>
+            <div class="task-title">do highly important thing</div>
+            <div class="task-description">
+              highly important thing description
             </div>
-            <div class="form-item">
-                <label for="task-description">Task Description</label>
-                <input class="task-input" type="text" id="task-description" name="task-description" placeholder="Running, free weights, etc." type="text">
-            </div>
-            <div class="form-item">
-                <label for="task-date">Due date</label> <span aria-label="required">*</span></label>
-                <input type="date" id="task-date" name="task-date"required>
-            </div>
-            <div class="form-item">
-                <legend>Priority</legend>
-                <input class="task-input" id='priority' name='priority' type='radio' value='high' />
-                <label for='high' class='radio-label'>High</label>
-                <input class="task-input" id='medium' name='priority' type='radio' value='medium' checked />
-                <label for='medium' class='radio-label'>Medium</label>
-                <input class="task-input" id='low' name='priority' type='radio' value='low' checked />
-                <label for='low' class='radio-label'>Low</label>
-            </div>
+          </s>
         </div>
-            <button class="submit-modal-btn" type="button">Add</button>
-            <button class="close-modal" type="button">Close</button>
-        </fieldset>
-    </dialog>
-    
-    <footer>
-      rossclay
-      <a href="https://github.com/rossclay"
-        ><ion-icon name="logo-github" class="github-logo"></ion-icon
-      ></a>
-    </footer>
-    <script
-      type="module"
-      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      nomodule
-      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
-    ></script>
-  </body>
+      </div>
+      <div class="task-footer">
+        <div class="task-date">06/26/2025</div>
+        <div>
+          <img class="img-write" /><img class="img-trash" />
+        </div>
+      </div>
+    </div>
+    <div class="task-card medium">
+      <div class="task-header">
+        <input type="checkbox" class="task-checkbox" name="task-checkbox" />
+        <div class="task-content">
+          <div class="task-title">do medium important thing</div>
+        </div>
+      </div>
+      <div class="task-footer">
+        <div class="task-date">06/26/2025</div>
+        <div>
+          <img class="img-write" /><img class="img-trash" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <dialog class='task-modal'>
+    <fieldset>
+      <legend>Task Information</legend>
+      <div class="form-container">
+        <div class="form-item">
+          <label for="task-title">Task Title <span aria-label="required">*</span></label>
+          <input class="task-input" type="text" id="task-title" name="task-title" placeholder="Daily Exercise" required>
+        </div>
+        <div class="form-item">
+          <label for="task-description">Task Description</label>
+          <input class="task-input" type="text" id="task-description" name="task-description"
+            placeholder="Running, free weights, etc." type="text">
+        </div>
+        <div class="form-item">
+          <label for="task-date">Due date</label> <span aria-label="required">*</span></label>
+          <input type="date" id="task-date" name="task-date" required>
+        </div>
+        <div class="form-item">
+          <legend>Priority: </legend>
+          <input class="task-input" id='high' name='priority' type='radio' value='high' />
+          <label for='high' class='radio-label'>High</label>
+          <input class="task-input" id='medium' name='priority' type='radio' value='medium' checked />
+          <label for='medium' class='radio-label'>Medium</label>
+          <input class="task-input" id='low' name='priority' type='radio' value='low' checked />
+          <label for='low' class='radio-label'>Low</label>
+        </div>
+      </div>
+      <button class="submit-modal-btn" type="button">Add</button>
+      <button class="close-modal" type="button">Close</button>
+    </fieldset>
+  </dialog>
+
+  <footer>
+    rossclay
+    <a href="https://github.com/rossclay"><ion-icon name="logo-github" class="github-logo"></ion-icon></a>
+  </footer>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
 </html>
