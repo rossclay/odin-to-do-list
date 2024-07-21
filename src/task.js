@@ -137,4 +137,4 @@ const setAllTasksView = (state) => allTasksView = state
 
 const getProjectForTask = (task) => projects.find(project => project.taskList.includes(task))
 
-export default { createTask, Task, createProject, Project, projects, createProject, deleteProject, addTaskToProject, deleteTaskFromProject, getProject, getCurrentProject, getProjectForTask, setAllTasksView, checkAllTasksView };
+export { createTask, Task, createProject, Project, projects, deleteProject, addTaskToProject, deleteTaskFromProject, getProject, getCurrentProject, getProjectForTask, setAllTasksView, checkAllTasksView };
