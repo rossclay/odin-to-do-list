@@ -73,6 +73,10 @@ header {
   justify-content: center;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
+  width: 100%;
+  padding: 5px 10px;
+  border-radius: 6px;
 }
 
 .project-footer {
@@ -81,17 +85,18 @@ header {
   gap: 4px;
 }
 
-.project-title {
-  cursor: pointer;
-}
-
 .project-btn {
   border: 2px solid var(--brunswick-green);
   background-color: var(--timberwolf);
-  font-size: .8rem;
+  font-size: 0.8rem;
   border-radius: 4px;
   padding: 2px 4px;
   cursor: pointer;
+}
+
+.project-btn:hover,
+.project-card:hover {
+  background-color: var(--fern-green);
 }
 
 button {
@@ -104,7 +109,6 @@ button {
   background-color: var(--sage);
   margin-top: 4px;
 }
-
 
 .submit-modal-btn,
 .close-modal {
