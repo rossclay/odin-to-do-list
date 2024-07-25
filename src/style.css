@@ -85,7 +85,14 @@ header {
   gap: 4px;
 }
 
-.project-btn {
+.project-title,
+.project-input {
+  width: 7rem;
+}
+
+.project-btn,
+.submit-project-modal-btn,
+.cancel-project-modal-btn {
   border: 2px solid var(--brunswick-green);
   background-color: var(--timberwolf);
   font-size: 0.8rem;
@@ -94,9 +101,14 @@ header {
   cursor: pointer;
 }
 
-.project-btn:hover,
 .project-card:hover {
   background-color: var(--fern-green);
+}
+
+.project-btn:hover,
+.submit-project-modal-btn:hover,
+.cancel-project-modal-btn:hover {
+  background-color: var(--sage);
 }
 
 button {
@@ -317,6 +329,14 @@ fieldset {
 legend {
   text-align: center;
   padding: 16px;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.show {
+  visibility: visible;
 }
 
 /* footer styling */

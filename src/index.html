@@ -17,18 +17,19 @@
       </div>
       <div class="side-card">
         <div class="sidebar-header">my projects</div>
-        <div class="side-card">
+        <button class="add-project-btn">Add Project</button>
+        <div class="side-card" id="projects-section">
           <div class="project-card">
             <img class="img-project" />
             <div class="project-title">sample project</div>
             <div class="project-footer">
               <div class="project-btn">edit</div>
-              <div class="project-btn">del</div>
+              <div class="project-btn">delete</div>
             </div>
           </div>
         </div>
-        <dialog class="project-modal">
-          <div class="project-card">
+        <div class="side-card">
+          <div class="project-card hide" id="project-modal">
             <img class="img-project" />
             <input
               class="project-input"
@@ -40,11 +41,10 @@
             />
             <div class="project-footer">
               <div class="submit-project-modal-btn">add</div>
-              <div class="cancel-project-modal-btn">del</div>
+              <div class="cancel-project-modal-btn">cancel</div>
             </div>
           </div>
-        </dialog>
-        <button class="add-project-btn">Add Project</button>
+        </div>
       </div>
     </div>
     <div class="content">
