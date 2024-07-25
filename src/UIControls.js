@@ -8,7 +8,7 @@ import * as taskModule from "./task";
 import * as projectModule from "./project";
 
 const UIController = (() => {
-  const cardSection = document.querySelector(".card-section");
+  const tasksSection = document.querySelector(".card-section");
 
   // create new tasks
   const createNewTask = () => {
@@ -26,14 +26,25 @@ const UIController = (() => {
       newTaskDueDate,
       newTaskPriority
     );
-    // need to rework these from the library project to make it work here
-    addTaskToProject(newTask);
+    return newTask;
   };
-
-  // create new projects
-  const createNewProject = () => {
-    let newProjectTitle = document.querySelector("#project-title").value;
-    let newProject = projectModule.Project(newProjectTitle);
+  const createNewTaskCard = (task) => {
+    const newTaskCard = document.createElement("div");
+    newTaskCard.classList.add("task-card");
+    newTaskCard.classList.add(`${task.priority}`);
+    newTaskCard.innerHTML = `
+          <div class="task-header">
+            <input type="checkbox" class="task-checkbox" name="task-checkbox" />
+            <div class="task-content">
+              <div class="task-title">${task.title}</div>
+              <div class="task-description">${task.description}</div>
+            </div>
+          </div>
+          <div class="task-footer">
+            <div class="task-date">${task.dueDate}</div>
+            <div><img class="img-write" src="${writeImgSrc}"/><img class="img-trash" src="${trashImgSrc}"/></div>
+          </div>`;
+    tasksSection.appendChild(newTaskCard);
   };
 
   // add srcs for images in sample tasks and projects
@@ -45,6 +56,7 @@ const UIController = (() => {
   projectImgs.forEach((image) => (image.src = projectImgSrc));
 
   // modal functionality
+  // task modal
   const addTaskBtn = document.querySelector(".add-task-btn");
   const closeBtn = document.querySelector(".close-modal");
   const taskModal = document.querySelector(".task-modal");
@@ -53,10 +65,7 @@ const UIController = (() => {
   closeBtn.addEventListener("click", () => taskModal.close());
 
   submitTaskModalBtn.addEventListener("click", () => {
-    createNewTask();
-    // need to create functions related to displaying tasks and reset projects?
-    resetProjects(cardSection);
-    displayTasks(myProjects);
+    createNewTaskCard(createNewTask());
     taskModal.close();
   });
   // additional feature for closing modal when clicking outside of dialog window
@@ -74,9 +83,45 @@ const UIController = (() => {
 
   // project modal - UNDER CONSTRUCTION
   const addProjectBtn = document.querySelector(".add-project-btn");
-  const projectModal = document.querySelector(".project-modal");
+  const projectModal = document.querySelector("#project-modal");
+  const toggleProjectModalVisibility = () => {
+    projectModal.classList.toggle("hide");
+  };
   addProjectBtn.addEventListener("click", () => {
-    projectModal.showModal();
+    if (projectModal.classList.contains("hide")) {
+      toggleProjectModalVisibility();
+    }
+  });
+  const cancelProjectBtn = document.querySelector(".cancel-project-modal-btn");
+  cancelProjectBtn.addEventListener("click", () => {
+    toggleProjectModalVisibility();
+  });
+  // create new projects
+  const createNewProject = () => {
+    let newProjectTitle = document.querySelector("#project-title").value;
+    let newProject = projectModule.createProject(newProjectTitle);
+    createNewProjectCard(newProjectTitle);
+    return newProject;
+  };
+  // DOM
+  const createNewProjectCard = (title) => {
+    const newProjectCard = document.createElement("div");
+    newProjectCard.classList.add("project-card");
+    newProjectCard.innerHTML = `<img class="img-project" src="${projectImgSrc}"/>
+            <div class="project-title">${title}</div>
+            <div class="project-footer">
+              <div class="project-btn">edit</div>
+              <div class="project-btn">delete</div>`;
+    projectsSection.appendChild(newProjectCard);
+  };
+
+  const submitProjectModalBtn = document.querySelector(
+    ".submit-project-modal-btn"
+  );
+  const projectsSection = document.querySelector("#projects-section");
+  submitProjectModalBtn.addEventListener("click", () => {
+    createNewProject();
+    toggleProjectModalVisibility();
   });
 
   // responsive task cards: strike through tasks once they are complete
@@ -84,12 +129,16 @@ const UIController = (() => {
     if (event.target.checked) return true;
     else return false;
   };
+  // how can we add this functionality to NEW task checkboxes too?
   const taskBoxes = document.querySelectorAll(".task-checkbox");
+  const handleTaskBoxClick = (e) => {
+    if (isTaskComplete(e)) {
+      e.target.parentNode.classList.add("strike-through");
+    } else e.target.parentNode.classList.remove("strike-through");
+  };
   taskBoxes.forEach((taskBox) => {
     taskBox.addEventListener("click", (e) => {
-      if (isTaskComplete(e)) {
-        e.target.parentNode.classList.add("strike-through");
-      } else e.target.parentNode.classList.remove("strike-through");
+      handleTaskBoxClick(e);
     });
   });
 
