@@ -18,7 +18,7 @@ class Task {
     if (date) {
       const dateObject = parse(date, "yyyy-MM-dd", new Date());
       if (isValid(dateObject)) {
-        return this.format(dateObject, "MM/dd/yyyy");
+        return format(dateObject, "MM/dd/yyyy");
       }
       return "";
     }
