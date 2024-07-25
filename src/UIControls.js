@@ -1,10 +1,11 @@
 import { format, transpose } from "date-fns";
 import { saveToLocalStorage } from "./storage";
-import writeImgSrc from "./img/icons8-write-48.png"
-import trashImgSrc from "./img/icons8-trash-24.png"
-import projectImgSrc from './img/icons8-project-32.png'
-import taskModule from "./task.js";
-
+import writeImgSrc from "./img/icons8-write-48.png";
+import trashImgSrc from "./img/icons8-trash-24.png";
+import projectImgSrc from "./img/icons8-project-32.png";
+import faviconSrc from "./img/icons8-list-50.png";
+import * as taskModule from "./task";
+import * as projectModule from "./project";
 
 const UIController = (() => {
   const cardSection = document.querySelector(".card-section");
@@ -19,7 +20,7 @@ const UIController = (() => {
     );
     let newTaskPriority = document.querySelector("#task-priority").value;
 
-    let newTask = new Task(
+    let newTask = taskModule.createTask(
       newTaskTitle,
       newTaskDescription,
       newTaskDueDate,
@@ -27,29 +28,32 @@ const UIController = (() => {
     );
     // need to rework these from the library project to make it work here
     addTaskToProject(newTask);
-  }
+  };
+
+  // create new projects
+  const createNewProject = () => {
+    let newProjectTitle = document.querySelector("#project-title").value;
+    let newProject = projectModule.Project(newProjectTitle);
+  };
 
   // add srcs for images in sample tasks and projects
-  const writeImgs = document.querySelectorAll('.img-write')
-  writeImgs.forEach((image) =>
-    image.src = writeImgSrc)
-  const trashImgs = document.querySelectorAll('.img-trash')
-  trashImgs.forEach((image) =>
-    image.src = trashImgSrc)
-  const projectImgs = document.querySelectorAll('.img-project')
-  projectImgs.forEach((image) =>
-    image.src = projectImgSrc)
+  const writeImgs = document.querySelectorAll(".img-write");
+  writeImgs.forEach((image) => (image.src = writeImgSrc));
+  const trashImgs = document.querySelectorAll(".img-trash");
+  trashImgs.forEach((image) => (image.src = trashImgSrc));
+  const projectImgs = document.querySelectorAll(".img-project");
+  projectImgs.forEach((image) => (image.src = projectImgSrc));
 
   // modal functionality
   const addTaskBtn = document.querySelector(".add-task-btn");
   const closeBtn = document.querySelector(".close-modal");
   const taskModal = document.querySelector(".task-modal");
-  const submitModalBtn = document.querySelector(".submit-modal-btn");
+  const submitTaskModalBtn = document.querySelector(".submit-task-modal-btn");
   addTaskBtn.addEventListener("click", () => taskModal.showModal());
   closeBtn.addEventListener("click", () => taskModal.close());
 
-  submitModalBtn.addEventListener("click", () => {
-    createNewTask()
+  submitTaskModalBtn.addEventListener("click", () => {
+    createNewTask();
     // need to create functions related to displaying tasks and reset projects?
     resetProjects(cardSection);
     displayTasks(myProjects);
@@ -68,26 +72,35 @@ const UIController = (() => {
     }
   });
 
-  // responsive task cards: strike through tasks once they are complete
+  // project modal - UNDER CONSTRUCTION
+  const addProjectBtn = document.querySelector(".add-project-btn");
+  const projectModal = document.querySelector(".project-modal");
+  addProjectBtn.addEventListener("click", () => {
+    projectModal.showModal();
+  });
 
+  // responsive task cards: strike through tasks once they are complete
   const isTaskComplete = (event) => {
     if (event.target.checked) return true;
     else return false;
   };
-
   const taskBoxes = document.querySelectorAll(".task-checkbox");
-  // use forEach to add an event listener to all of these
   taskBoxes.forEach((taskBox) => {
-    taskBox.addEventListener('click', (e) => {
+    taskBox.addEventListener("click", (e) => {
       if (isTaskComplete(e)) {
-        e.target.parentNode.classList.add('strike-through')
-      } else (e.target.parentNode.classList.remove('strike-through'))
-    })
-  })
+        e.target.parentNode.classList.add("strike-through");
+      } else e.target.parentNode.classList.remove("strike-through");
+    });
+  });
 
-
-
-
+  // favicon
+  let link = document.querySelector("link[rel~='icon']");
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "icon";
+    document.head.appendChild(link);
+  }
+  link.href = faviconSrc;
 })();
 
 export default { UIController };
