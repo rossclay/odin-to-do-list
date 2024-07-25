@@ -110,20 +110,20 @@ button {
   margin-top: 4px;
 }
 
-.submit-modal-btn,
+.submit-task-modal-btn,
 .close-modal {
   padding: 4px;
 }
 
 .task-filter-btn:hover,
-.submit-modal-btn:hover,
+.submit-task-modal-btn:hover,
 .close-modal:hover {
   background-color: var(--fern-green);
 }
 
 .add-project-btn,
 .add-task-btn,
-.submit-modal-btn,
+.submit-task-modal-btn,
 .close-modal {
   border-radius: 4px;
   padding-left: 50px;
@@ -210,7 +210,7 @@ button {
   gap: 10px;
 }
 
-.task-footer>div {
+.task-footer > div {
   display: flex;
   flex-direction: row;
   align-items: center;

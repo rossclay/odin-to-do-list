@@ -27,6 +27,23 @@
             </div>
           </div>
         </div>
+        <dialog class="project-modal">
+          <div class="project-card">
+            <img class="img-project" />
+            <input
+              class="project-input"
+              type="text"
+              id="project-title"
+              name="project-title"
+              placeholder="project title"
+              required
+            />
+            <div class="project-footer">
+              <div class="submit-project-modal-btn">add</div>
+              <div class="cancel-project-modal-btn">del</div>
+            </div>
+          </div>
+        </dialog>
         <button class="add-project-btn">Add Project</button>
       </div>
     </div>
@@ -118,35 +135,14 @@
           </div>
           <div class="form-item">
             <legend>Priority:</legend>
-            <input
-              class="task-input"
-              id="high"
-              name="priority"
-              type="radio"
-              value="high"
-            />
-            <label for="high" class="radio-label">High</label>
-            <input
-              class="task-input"
-              id="medium"
-              name="priority"
-              type="radio"
-              value="medium"
-              checked
-            />
-            <label for="medium" class="radio-label">Medium</label>
-            <input
-              class="task-input"
-              id="low"
-              name="priority"
-              type="radio"
-              value="low"
-              checked
-            />
-            <label for="low" class="radio-label">Low</label>
+            <select name="task-priority" id="task-priority">
+              <option value="high">high</option>
+              <option value="medium">medium</option>
+              <option value="low">low</option>
+            </select>
           </div>
         </div>
-        <button class="submit-modal-btn" type="button">Add</button>
+        <button class="submit-task-modal-btn" type="button">Add</button>
         <button class="close-modal" type="button">Close</button>
       </fieldset>
     </dialog>
