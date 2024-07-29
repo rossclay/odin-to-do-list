@@ -34,6 +34,14 @@ class Project {
 
 projects = loadFromLocalStorage(Project);
 
+let allTasksView = false;
+let allTasksTodayView = false;
+let allImportantTasksView = false;
+
+const checkAllTasksView = () => allTasksView;
+const checkAllTasksTodayView = () => allTasksTodayView;
+const checkAllImportantTasksView = () => allImportantTasksView;
+
 const createProject = (name) => {
   const myProject = new Project(name);
   projects.push(myProject);
@@ -69,6 +77,10 @@ const getCurrentProject = () => projects.find((project) => project.selected);
 
 const setAllTasksView = (state) => (allTasksView = state);
 
+const setAllTasksTodayView = (state) => (allTasksTodayView = state);
+
+const setAllImportantTasksView = (state) => (allImportantTasksView = state);
+
 const getProjectForTask = (task) =>
   projects.find((project) => project.taskList.includes(task));
 
@@ -82,5 +94,10 @@ export {
   getProject,
   getCurrentProject,
   getProjectForTask,
+  checkAllTasksView,
+  checkAllTasksTodayView,
+  checkAllImportantTasksView,
   setAllTasksView,
+  setAllTasksTodayView,
+  setAllImportantTasksView,
 };
