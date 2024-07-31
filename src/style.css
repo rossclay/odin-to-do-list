@@ -265,6 +265,12 @@ img {
   height: 1rem;
 }
 
+.editing-task-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 /* task modal styling */
 
 .task-input {
