@@ -124,6 +124,8 @@ const UIController = (() => {
 
   // edit tasks - UNDER CONSTRUCTION
   const handleEditTask = (taskCard, task) => {
+    const existingTaskCard = taskCard;
+    const existingTaskCardHTML = taskCard.innerHTML;
     // taskCard.innerHTML = `<div class="task-header">
     //         <legend>Priority:</legend>
     //         <select name="task-priority" id="task-priority">
@@ -160,8 +162,14 @@ const UIController = (() => {
     //         <input type="date" id="task-date" name="task-date" value=${task.dueDate} required />
     //         <div><img class="img-write" src="${writeImgSrc}"/><img class="img-trash" src="${trashImgSrc}"/></div>
     //       </div>`;
+
+    taskCard.innerHTML = "";
+    const editTaskHeaderDiv = document.createElement("div");
+    editTaskHeaderDiv.classList.add("editing-task-header");
+    taskCard.appendChild(editTaskHeaderDiv);
     const priorityLegend = document.createElement("legend");
     priorityLegend.textContent = "Priority:";
+    editTaskHeaderDiv.appendChild(priorityLegend);
     const prioritySelect = document.createElement("select");
     prioritySelect.setAttribute("name", "task-priority");
     prioritySelect.setAttribute("id", "task-priority");
@@ -178,12 +186,58 @@ const UIController = (() => {
     optionLow.setAttribute("value", "low");
     optionLow.textContent = "low";
     prioritySelect.appendChild(optionLow);
+    const taskTitleLabel = document.createElement("label");
+    taskTitleLabel.setAttribute("for", "task-title");
+    taskTitleLabel.textContent = "Task Title";
+    editTaskHeaderDiv.appendChild(taskTitleLabel);
+    const taskTitleInput = document.createElement("input");
+    taskTitleInput.classList.add("task-input");
+    taskTitleInput.setAttribute("type", "text");
+    taskTitleInput.setAttribute("name", "task-title");
+    taskTitleInput.setAttribute("id", "edit-task-title");
+    taskTitleInput.setAttribute("value", `${task.title}`);
+    taskTitleLabel.appendChild(taskTitleInput);
+    const taskDescriptionLabel = document.createElement("label");
+    taskDescriptionLabel.setAttribute("for", "task-description");
+    taskDescriptionLabel.textContent = "Task Description";
+    editTaskHeaderDiv.appendChild(taskDescriptionLabel);
+    const taskDescriptionInput = document.createElement("input");
+    taskDescriptionInput.classList.add("task-input");
+    taskDescriptionInput.setAttribute("type", "text");
+    taskDescriptionInput.setAttribute("name", "task-description");
+    taskDescriptionInput.setAttribute("id", "edit-task-description");
+    taskDescriptionLabel.appendChild(taskDescriptionInput);
+    if (task.description) {
+      taskDescriptionInput.setAttribute("value", `${task.description}`);
+    }
+    const editTaskFooterDiv = document.createElement("div");
+    editTaskFooterDiv.classList.add("task-footer");
+    taskCard.appendChild(editTaskFooterDiv);
+    const editDueDateInput = document.createElement("input");
+    editDueDateInput.setAttribute("id", "task-date");
+    editDueDateInput.setAttribute("name", "task-date");
+    editDueDateInput.setAttribute("type", "date");
+    editDueDateInput.setAttribute("value", `${task.dueDate}`);
+    editTaskFooterDiv.appendChild(editDueDateInput);
+    const submitUpdateBtn = document.createElement("button");
+    submitUpdateBtn.classList.add("task-editing-btns");
+    submitUpdateBtn.textContent = "update";
+    editTaskFooterDiv.appendChild(submitUpdateBtn);
+    const cancelUpdateBtn = document.createElement("button");
+    cancelUpdateBtn.classList.add("task-editing-btn");
+    cancelUpdateBtn.textContent = "cancel";
+    editTaskFooterDiv.appendChild(cancelUpdateBtn);
+
     // also need to update the js object
     submitUpdateBtn.addEventListener("click", () => {
-      handleEditTaskUpdate();
+      try {
+        handleEditTaskUpdate();
+      } catch {
+        alert("Task Title and Date are required!");
+      }
     });
     cancelUpdateBtn.addEventListener("click", () => {
-      handleCancelTaskUpdate();
+      handleCancelTaskUpdate(existingTaskCard, existingTaskCardHTML, task);
     });
   };
 
@@ -200,8 +254,24 @@ const UIController = (() => {
     task.updatePriority(newPriority);
   };
 
-  const handleCancelTaskUpdate = () => {};
+  const handleCancelTaskUpdate = (
+    previousTaskCard,
+    previousHTML,
+    previousTask
+  ) => {
+    previousTaskCard.innerHTML = previousHTML;
+    // using innerHTML loses the event listeners, so we need to get them back
+    const editBtn = previousTaskCard.querySelector(".img-write");
+    editBtn.addEventListener("click", () => {
+      handleEditTask(previousTaskCard, previousTask);
+    });
+    // delete btn functionality not yet implemented
+    // const delBtn = document.taskCard.querySelector('img-trash')
+    // delBtn.addEventListener('click',()=>{
+    // })
+  };
 
+  // these actually won't exist in the final product, as they only represent the imgs in the index.html file
   writeImgs.forEach((writeImg) => {
     writeImg.addEventListener("click", (e) => {
       let taskCard = e.target.parentNode.parentNode.parentNode;
@@ -254,6 +324,7 @@ const UIController = (() => {
   });
 
   // responsive task cards: strike through tasks once they are complete
+  // need to update js object to reflect this as well.
   const isTaskComplete = (event) => {
     if (event.target.checked) return true;
     else return false;
