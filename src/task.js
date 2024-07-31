@@ -1,9 +1,5 @@
 import { parse, format, isValid } from "date-fns";
 
-let allTasksView = false;
-
-const checkAllTasksView = () => allTasksView;
-
 class Task {
   constructor(title, description, dueDate, priority) {
     this.title = title;

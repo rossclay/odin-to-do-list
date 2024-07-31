@@ -30,6 +30,13 @@ class Project {
       taskList: this.taskList.map((task) => task.toJSON()),
     };
   }
+
+  static fromJSON(json) {
+    const list = new Project(json.name);
+    list.id = json.id;
+    list.taskList = json.taskList.map(task.Task.fromJSON);
+    return list;
+  }
 }
 
 projects = loadFromLocalStorage(Project);
@@ -54,6 +61,12 @@ const deleteProject = (projectID) => {
     lists.splice(index, 1);
     saveToLocalStorage(projects);
   }
+};
+
+const updateName = (projectId, newName) => {
+  const list = getList(projectId);
+  list.name = newName;
+  saveToLocalStorage(projects);
 };
 const addTaskToProject = (projectId, task) => {
   const list = getList(projectId);
@@ -89,6 +102,7 @@ export {
   Project,
   projects,
   deleteProject,
+  updateName,
   addTaskToProject,
   deleteTaskFromProject,
   getProject,
