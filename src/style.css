@@ -269,6 +269,7 @@ img {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 
 /* task modal styling */
@@ -282,18 +283,30 @@ img {
   font-size: 14px;
 }
 
-.task-input[type="text"]:invalid {
+.editing-task-input {
+  background-color: #ffffff;
+  border: 1px solid #d6d9dc;
+  border-radius: 3px;
+  padding: 3.5px;
+  width: 80%;
+}
+
+.task-input[type="text"]:invalid,
+.editing-task-input[type="text"]:invalid {
   border: 1px solid #d55c5f;
   box-shadow: none;
 }
 
 .task-input:focus,
-.task-input:invalid:focus {
+.task-input:invalid:focus,
+.editing-task-input:focus,
+.editing-task-input:invalid:focus {
   outline: none;
   border: 1px solid #4f89d4;
 }
 
-.task-input[type="text"]:valid {
+.task-input[type="text"]:valid,
+.editing-task-input[type="text"]:valid {
   border: 1px solid green;
 }
 
