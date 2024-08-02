@@ -34,7 +34,7 @@ class Project {
   static fromJSON(json) {
     const list = new Project(json.name);
     list.id = json.id;
-    list.taskList = json.taskList.map(task.Task.fromJSON);
+    list.taskList = json.taskList.map(Task.Task.fromJSON);
     return list;
   }
 }
