@@ -11,15 +11,15 @@ const UIController = (() => {
   const tasksSection = document.querySelector(".card-section");
 
   // create new tasks
-  const createNewTask = () => {
-    let newTaskTitle = document.querySelector("#task-title").value;
-    let newTaskDescription = document.querySelector("#task-description").value;
-    let newTaskDueDate = format(
+  const createNewTask = (
+    newTaskTitle = document.querySelector("#task-title").value,
+    newTaskDescription = document.querySelector("#task-description").value,
+    newTaskDueDate = format(
       document.querySelector("#task-date").value,
       "yyyy-MM-dd"
-    );
-    let newTaskPriority = document.querySelector("#task-priority").value;
-
+    ),
+    newTaskPriority = document.querySelector("#task-priority").value
+  ) => {
     let newTask = taskModule.createTask(
       newTaskTitle,
       newTaskDescription,
@@ -30,14 +30,14 @@ const UIController = (() => {
   };
   const createNewTaskCard = (task) => {
     const newTaskCard = document.createElement("div");
-    newTaskCard.classList.add("task-card");
-    // separate out populating the task card so we can repurpose this when editing tasks
+    // separate out populating the task card from creating the task card
     populateTaskCard(task, newTaskCard);
     tasksSection.appendChild(newTaskCard);
   };
+  // we can use this for new task cards and for editing them
   const populateTaskCard = (popTask, popTaskCard) => {
     popTaskCard.innerHTML = "";
-    popTaskCard.classList.add(`${popTask.priority}`);
+    popTaskCard.setAttribute("class", `task-card ${popTask.priority}`);
     // using creating elements instead of innerHTML to allow for easier editing of the task cards
     let newTaskHeaderDiv = document.createElement("div");
     newTaskHeaderDiv.classList.add("task-header");
@@ -47,7 +47,7 @@ const UIController = (() => {
     newTaskCheckbox.setAttribute("name", "task-checkbox");
     // dynamic checkbox functionality
     newTaskCheckbox.addEventListener("click", (e) => {
-      handleTaskBoxClick(e);
+      handleTaskBoxClick(e, popTask);
     });
     newTaskHeaderDiv.appendChild(newTaskCheckbox);
     let newTaskContentDiv = document.createElement("div");
@@ -79,6 +79,7 @@ const UIController = (() => {
     newTrashImg.classList.add("img-trash");
     newTrashImg.src = trashImgSrc;
     newTrashImg.addEventListener("click", () => {
+      // under construction
       console.log("delete works");
     });
     imgContainer.appendChild(newTaskWriteImg);
@@ -88,15 +89,21 @@ const UIController = (() => {
     popTaskCard.appendChild(newTaskHeaderDiv);
     popTaskCard.appendChild(newTaskFooterDiv);
   };
-
-  // add srcs for images in sample tasks and projects. we might be able to remove this when development is over.
-  const writeImgs = document.querySelectorAll(".img-write");
-  writeImgs.forEach((image) => (image.src = writeImgSrc));
-  const trashImgs = document.querySelectorAll(".img-trash");
-  trashImgs.forEach((image) => (image.src = trashImgSrc));
-  const projectImgs = document.querySelectorAll(".img-project");
-  projectImgs.forEach((image) => (image.src = projectImgSrc));
-
+  // responsive task cards: strike through tasks once they are complete
+  const isTaskComplete = (event, task) => {
+    if (event.target.checked) {
+      task.complete = true;
+      return true;
+    } else {
+      task.complete = false;
+      return false;
+    }
+  };
+  const handleTaskBoxClick = (e, task) => {
+    if (isTaskComplete(e, task)) {
+      e.target.parentNode.classList.add("strike-through");
+    } else e.target.parentNode.classList.remove("strike-through");
+  };
   // modal functionality
   // task modal
   const addTaskBtn = document.querySelector(".add-task-btn");
@@ -127,12 +134,11 @@ const UIController = (() => {
     }
   });
 
-  // edit tasks - UNDER CONSTRUCTION
+  // edit tasks
   const handleEditTask = (task, taskCard) => {
     const existingTaskCard = taskCard;
     const existingTaskCardHTML = taskCard.innerHTML;
 
-    // lots of code here. consider building the "edit-task-card" as its own function, similar to populateTaskCard
     taskCard.innerHTML = "";
     const editTaskHeaderDiv = document.createElement("div");
     editTaskHeaderDiv.classList.add("editing-task-header");
@@ -200,15 +206,13 @@ const UIController = (() => {
     editTaskFooterDiv.appendChild(cancelUpdateBtn);
 
     submitUpdateBtn.addEventListener("click", () => {
-      // try {
-      // update the js object and the DOM
-      handleEditTaskUpdate(task, taskCard);
-      // } catch {
-      //   alert("Task Title and Date are required!");
-
-      // }
+      try {
+        // update the js object and the DOM
+        handleEditTaskUpdate(task, taskCard);
+      } catch {
+        alert("Task Title and Date are required!");
+      }
     });
-    // cancelling makes us lose the event listener. need to fix
     cancelUpdateBtn.addEventListener("click", () => {
       handleCancelTaskUpdate(existingTaskCard, existingTaskCardHTML, task);
     });
@@ -222,7 +226,6 @@ const UIController = (() => {
     newDueDate = document.getElementById("edit-task-date").value,
     newPriority = document.getElementById("edit-task-priority").value
   ) => {
-    console.log(task);
     task.updateTitle(newTitle);
     task.updateDescription(newDescription);
     task.updateDueDate(newDueDate);
@@ -239,27 +242,27 @@ const UIController = (() => {
     // using innerHTML loses the event listeners, so we need to get them back
     const editBtn = previousTaskCard.querySelector(".img-write");
     editBtn.addEventListener("click", () => {
-      handleEditTask(previousTaskCard, previousTask);
+      handleEditTask(previousTask, previousTaskCard);
     });
-    // delete btn functionality not yet implemented
+    const taskCheckBox = previousTaskCard.querySelector(".task-checkbox");
+    taskCheckBox.addEventListener("click", (e) => {
+      handleTaskBoxClick(e, previousTask);
+    });
+    // UNDER CONSTRUCTION
+    // delete btn functionality not yet implemented. need to bind tasks to their respective projects first instead?
     // const delBtn = document.taskCard.querySelector('img-trash')
     // delBtn.addEventListener('click',()=>{
     // })
   };
 
-  // these actually won't exist in the final product, as they only represent the imgs in the index.html file
-  // so no need to update them except to remove them when development is complete
-  writeImgs.forEach((writeImg) => {
-    writeImg.addEventListener("click", (e) => {
-      let taskCard = e.target.parentNode.parentNode.parentNode;
-      console.log(taskCard);
-      // handleEditTask(taskCard);
-    });
-  });
+  const handleDeleteTask = (task, taskCard) => {};
 
   // project modal
   const addProjectBtn = document.querySelector(".add-project-btn");
   const projectModal = document.querySelector("#project-modal");
+  const projectInput = projectModal.querySelector(".project-input");
+  const projectModalImg = projectModal.querySelector(".img-project");
+  projectModalImg.src = projectImgSrc;
   const toggleProjectModalVisibility = () => {
     projectModal.classList.toggle("hide");
   };
@@ -271,10 +274,12 @@ const UIController = (() => {
   const cancelProjectBtn = document.querySelector(".cancel-project-modal-btn");
   cancelProjectBtn.addEventListener("click", () => {
     toggleProjectModalVisibility();
+    projectInput.value = "";
   });
   // create new projects
-  const createNewProject = () => {
-    let newProjectTitle = document.querySelector("#project-title").value;
+  const createNewProject = (
+    newProjectTitle = document.querySelector("#project-title").value
+  ) => {
     let newProject = projectModule.createProject(newProjectTitle);
     createNewProjectCard(newProjectTitle);
     return newProject;
@@ -283,15 +288,32 @@ const UIController = (() => {
   const createNewProjectCard = (title) => {
     const newProjectCard = document.createElement("div");
     newProjectCard.classList.add("project-card");
-    // should we change this from innerhtml to create element because it will have event listeners?
-    newProjectCard.innerHTML = `<img class="img-project" src="${projectImgSrc}"/>
-            <div class="project-title">${title}</div>
-            <div class="project-footer">
-              <div class="project-btn">edit</div>
-              <div class="project-btn">delete</div>`;
+    const newProjectImg = document.createElement("img");
+    newProjectImg.classList.add("img-project");
+    newProjectImg.setAttribute("src", `${projectImgSrc}`);
+    newProjectCard.appendChild(newProjectImg);
+    const newProjectTitle = document.createElement("div");
+    newProjectTitle.classList.add("project-title");
+    newProjectTitle.textContent = `${title}`;
+    newProjectCard.appendChild(newProjectTitle);
+    const newProjectFooter = document.createElement("div");
+    newProjectFooter.classList.add("project-footer");
+    newProjectCard.appendChild(newProjectFooter);
+    const newProjectEditBtn = document.createElement("div");
+    newProjectEditBtn.classList.add("project-btn");
+    newProjectEditBtn.textContent = "edit";
+    newProjectFooter.appendChild(newProjectEditBtn);
+    newProjectEditBtn.addEventListener("click", () => {
+      handleEditProject(title, newProjectCard);
+    });
+    const newProjectDeleteBtn = document.createElement("div");
+    newProjectDeleteBtn.classList.add("project-btn");
+    newProjectDeleteBtn.textContent = "delete";
+    newProjectFooter.appendChild(newProjectDeleteBtn);
+    // newProjectDeleteBtn.addEventListener()
     projectsSection.appendChild(newProjectCard);
+    projectInput.value = "";
   };
-
   const submitProjectModalBtn = document.querySelector(
     ".submit-project-modal-btn"
   );
@@ -301,23 +323,38 @@ const UIController = (() => {
     toggleProjectModalVisibility();
   });
 
-  // responsive task cards: strike through tasks once they are complete
-  // need to update js object to reflect this as well.
-  const isTaskComplete = (event) => {
-    if (event.target.checked) return true;
-    else return false;
-  };
-  const taskBoxes = document.querySelectorAll(".task-checkbox");
-  const handleTaskBoxClick = (e) => {
-    if (isTaskComplete(e)) {
-      e.target.parentNode.classList.add("strike-through");
-    } else e.target.parentNode.classList.remove("strike-through");
-  };
-  taskBoxes.forEach((taskBox) => {
-    taskBox.addEventListener("click", (e) => {
-      handleTaskBoxClick(e);
+  // UNDER CONSTRUCTION
+  const handleEditProject = (title, previousProjectCard) => {
+    console.log(title);
+    console.log(previousProjectCard);
+    const projectFooter = previousProjectCard.querySelector(".project-footer");
+    previousProjectCard.removeChild(projectFooter);
+    const editProjectTitleDiv =
+      previousProjectCard.querySelector(".project-title");
+    editProjectTitleDiv.textContent = "";
+    editProjectTitleDiv.setAttribute("class", "");
+    const editProjectInput = document.createElement("input");
+    editProjectInput.classList.add("project-input");
+    editProjectInput.value = title;
+    editProjectTitleDiv.appendChild(editProjectInput);
+    const editProjectFooter = document.createElement("div");
+    editProjectFooter.classList.add("project-footer");
+    previousProjectCard.appendChild(editProjectFooter);
+    const updateProjectBtnDiv = document.createElement("div");
+    updateProjectBtnDiv.classList.add("project-btn");
+    updateProjectBtnDiv.textContent = "update";
+    // UNDER CONSTRUCTION
+    updateProjectBtnDiv.addEventListener("click", () => {
+      handleSubmitProjectUpdate;
     });
-  });
+    editProjectFooter.appendChild(updateProjectBtnDiv);
+    const cancelProjectUpdateBtnDiv = document.createElement("div");
+    cancelProjectUpdateBtnDiv.classList.add("project-btn");
+    cancelProjectUpdateBtnDiv.textContent = "cancel";
+    cancelProjectUpdateBtnDiv.addEventListener("click", () => {
+      handleCancelProjectUpdate;
+    });
+  };
 
   // favicon
   let link = document.querySelector("link[rel~='icon']");
@@ -327,6 +364,29 @@ const UIController = (() => {
     document.head.appendChild(link);
   }
   link.href = faviconSrc;
+  // DEVELOPMENT AREA: these will all be removed at project conclusion
+  // initial task and project cards for development example. will be removed before implementing
+  let lowTaskExample = createNewTaskCard(
+    createNewTask(
+      "do normal thing",
+      "normal thing description",
+      "2025-06-26",
+      "low"
+    )
+  );
+  let highTaskExample = createNewTask(
+    "do highly important thing",
+    "highly important thing description",
+    "2025-06-26",
+    "high"
+  );
+  let highTaskExampleCard = createNewTaskCard(highTaskExample);
+
+  let mediumTaskExample = createNewTaskCard(
+    createNewTask("do medium important thing", "", "2025-06-26", "medium")
+  );
+
+  let sampleProject = createNewProject("sample project");
 })();
 
 export default { UIController };
