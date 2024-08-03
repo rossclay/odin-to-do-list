@@ -9,6 +9,20 @@ import * as projectModule from "./project";
 
 const UIController = (() => {
   const tasksSection = document.querySelector(".card-section");
+  let currentDOMProject;
+  // UNDER CONSTRUCTION - how do we want to sort through all of the projects, and display all of those due today?
+  const todayBtn = document.getElementById("today-btn");
+  todayBtn.addEventListener("click", () => {
+    if (!projectModule.checkAllTasksTodayView) {
+      projectModule.setAllTasksTodayView(true);
+      projectModule.setAllTasksView(false);
+      projectModule.setAllImportantTasksView(false);
+    }
+  });
+
+  const allBtn = document.getElementById("all-btn");
+
+  const importantBtn = document.getElementById("important-btn");
 
   // create new tasks
   const createNewTask = (
@@ -194,7 +208,6 @@ const UIController = (() => {
     editDueDateInput.setAttribute("id", "edit-task-date");
     editDueDateInput.setAttribute("name", "task-date");
     editDueDateInput.setAttribute("type", "date");
-    editDueDateInput.setAttribute("value", `${task.dueDate}`);
     editTaskFooterDiv.appendChild(editDueDateInput);
     const submitUpdateBtn = document.createElement("button");
     submitUpdateBtn.classList.add("task-editing-btns");
@@ -228,7 +241,9 @@ const UIController = (() => {
   ) => {
     task.updateTitle(newTitle);
     task.updateDescription(newDescription);
-    task.updateDueDate(newDueDate);
+    if (newDueDate) {
+      task.updateDueDate(newDueDate);
+    }
     task.updatePriority(newPriority);
     populateTaskCard(task, taskCard);
   };
@@ -281,38 +296,16 @@ const UIController = (() => {
     newProjectTitle = document.querySelector("#project-title").value
   ) => {
     let newProject = projectModule.createProject(newProjectTitle);
-    createNewProjectCard(newProjectTitle);
+    createNewProjectCard(newProject);
     return newProject;
   };
   // DOM
-  const createNewProjectCard = (title) => {
+  const createNewProjectCard = (project) => {
     const newProjectCard = document.createElement("div");
     newProjectCard.classList.add("project-card");
-    const newProjectImg = document.createElement("img");
-    newProjectImg.classList.add("img-project");
-    newProjectImg.setAttribute("src", `${projectImgSrc}`);
-    newProjectCard.appendChild(newProjectImg);
-    const newProjectTitle = document.createElement("div");
-    newProjectTitle.classList.add("project-title");
-    newProjectTitle.textContent = `${title}`;
-    newProjectCard.appendChild(newProjectTitle);
-    const newProjectFooter = document.createElement("div");
-    newProjectFooter.classList.add("project-footer");
-    newProjectCard.appendChild(newProjectFooter);
-    const newProjectEditBtn = document.createElement("div");
-    newProjectEditBtn.classList.add("project-btn");
-    newProjectEditBtn.textContent = "edit";
-    newProjectFooter.appendChild(newProjectEditBtn);
-    newProjectEditBtn.addEventListener("click", () => {
-      handleEditProject(title, newProjectCard);
-    });
-    const newProjectDeleteBtn = document.createElement("div");
-    newProjectDeleteBtn.classList.add("project-btn");
-    newProjectDeleteBtn.textContent = "delete";
-    newProjectFooter.appendChild(newProjectDeleteBtn);
-    // newProjectDeleteBtn.addEventListener()
-    projectsSection.appendChild(newProjectCard);
-    projectInput.value = "";
+    // UNDER CONSTRUCTION: event listener to change view to different projects
+    newProjectCard.addEventListener("click", () => {});
+    populateProjectCard(project, newProjectCard);
   };
   const submitProjectModalBtn = document.querySelector(
     ".submit-project-modal-btn"
@@ -322,11 +315,40 @@ const UIController = (() => {
     createNewProject();
     toggleProjectModalVisibility();
   });
+  const populateProjectCard = (popProject, popProjectCard) => {
+    popProjectCard.innerHTML = "";
+    const newProjectImg = document.createElement("img");
+    newProjectImg.classList.add("img-project");
+    newProjectImg.setAttribute("src", `${projectImgSrc}`);
+    popProjectCard.appendChild(newProjectImg);
+    const newProjectTitle = document.createElement("div");
+    newProjectTitle.classList.add("project-title");
+    newProjectTitle.textContent = `${popProject.name}`;
+    popProjectCard.appendChild(newProjectTitle);
+    const newProjectFooter = document.createElement("div");
+    newProjectFooter.classList.add("project-footer");
+    popProjectCard.appendChild(newProjectFooter);
+    const newProjectEditBtn = document.createElement("div");
+    newProjectEditBtn.classList.add("project-btn");
+    newProjectEditBtn.classList.add("edit-btn");
+    newProjectEditBtn.textContent = "edit";
+    newProjectFooter.appendChild(newProjectEditBtn);
+    newProjectEditBtn.addEventListener("click", () => {
+      handleEditProject(popProject, popProjectCard);
+    });
+    const newProjectDeleteBtn = document.createElement("div");
+    newProjectDeleteBtn.classList.add("project-btn");
+    newProjectDeleteBtn.classList.add("del-btn");
+    newProjectDeleteBtn.textContent = "delete";
+    newProjectFooter.appendChild(newProjectDeleteBtn);
+    // newProjectDeleteBtn.addEventListener()
+    projectsSection.appendChild(popProjectCard);
+    projectInput.value = "";
+  };
 
-  // UNDER CONSTRUCTION
-  const handleEditProject = (title, previousProjectCard) => {
-    console.log(title);
-    console.log(previousProjectCard);
+  const handleEditProject = (project, previousProjectCard) => {
+    let existingProjectCard = previousProjectCard;
+    let existingProjectCardHTML = previousProjectCard.innerHTML;
     const projectFooter = previousProjectCard.querySelector(".project-footer");
     previousProjectCard.removeChild(projectFooter);
     const editProjectTitleDiv =
@@ -335,7 +357,7 @@ const UIController = (() => {
     editProjectTitleDiv.setAttribute("class", "");
     const editProjectInput = document.createElement("input");
     editProjectInput.classList.add("project-input");
-    editProjectInput.value = title;
+    editProjectInput.value = project.name;
     editProjectTitleDiv.appendChild(editProjectInput);
     const editProjectFooter = document.createElement("div");
     editProjectFooter.classList.add("project-footer");
@@ -343,16 +365,41 @@ const UIController = (() => {
     const updateProjectBtnDiv = document.createElement("div");
     updateProjectBtnDiv.classList.add("project-btn");
     updateProjectBtnDiv.textContent = "update";
-    // UNDER CONSTRUCTION
     updateProjectBtnDiv.addEventListener("click", () => {
-      handleSubmitProjectUpdate;
+      handleSubmitProjectUpdate(project, previousProjectCard);
     });
     editProjectFooter.appendChild(updateProjectBtnDiv);
     const cancelProjectUpdateBtnDiv = document.createElement("div");
     cancelProjectUpdateBtnDiv.classList.add("project-btn");
     cancelProjectUpdateBtnDiv.textContent = "cancel";
     cancelProjectUpdateBtnDiv.addEventListener("click", () => {
-      handleCancelProjectUpdate;
+      handleCancelProjectUpdate(
+        existingProjectCard,
+        existingProjectCardHTML,
+        project
+      );
+    });
+    editProjectFooter.appendChild(cancelProjectUpdateBtnDiv);
+  };
+
+  const handleSubmitProjectUpdate = (
+    project,
+    projectCard,
+    newTitle = projectCard.querySelector(".project-input").value
+  ) => {
+    projectModule.updateName(project.id, newTitle);
+    populateProjectCard(project, projectCard);
+  };
+
+  const handleCancelProjectUpdate = (previousCard, previousHTML, project) => {
+    previousCard.innerHTML = previousHTML;
+    const editBtn = previousCard.querySelector(".edit-btn");
+    editBtn.addEventListener("click", () => {
+      handleEditProject(project, previousCard);
+    });
+    const delBtn = previousCard.querySelector(".del-btn");
+    delBtn.addEventListener("click", () => {
+      // TBD
     });
   };
 
@@ -386,7 +433,7 @@ const UIController = (() => {
     createNewTask("do medium important thing", "", "2025-06-26", "medium")
   );
 
-  let sampleProject = createNewProject("sample project");
+  let sampleProject = createNewProject("Your Tasks");
 })();
 
 export default { UIController };
