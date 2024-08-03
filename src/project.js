@@ -6,7 +6,7 @@ let projects = [];
 class Project {
   constructor(name) {
     this.id = Date.now().toString();
-    this.name;
+    this.name = name;
     this.taskList = [];
   }
 
@@ -53,6 +53,7 @@ const createProject = (name) => {
   const myProject = new Project(name);
   projects.push(myProject);
   saveToLocalStorage(projects);
+  return myProject;
 };
 
 const deleteProject = (projectID) => {
@@ -64,7 +65,7 @@ const deleteProject = (projectID) => {
 };
 
 const updateName = (projectId, newName) => {
-  const list = getList(projectId);
+  const list = getProject(projectId);
   list.name = newName;
   saveToLocalStorage(projects);
 };
