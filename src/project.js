@@ -59,7 +59,7 @@ const createProject = (name) => {
 const deleteProject = (projectID) => {
   const index = getProjectIndex(projectID);
   if (index !== -1) {
-    lists.splice(index, 1);
+    projects.splice(index, 1);
     saveToLocalStorage(projects);
   }
 };
