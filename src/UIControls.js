@@ -9,12 +9,12 @@ import * as projectModule from "./project";
 
 const UIController = (() => {
   const tasksSection = document.querySelector(".card-section");
-  // UNDER CONSTRUCTION - i want to scan all of the projects, and see if the currentDOMProject value is in the project list
-  // why do i want this? because i want to change THAT project, and not the currentDOMProject(which is a copy) when i use the edit and delete btns
-  let currentDOMProject;
-  const getCurrentDOMProjectValue = () => {
-    if (projectModule.projects.includes(currentDOMProject)) {
-      let projectIndex = projectModule.projects.indexOf(currentDOMProject);
+  const cardSectionHeader = document.querySelector(".content-header");
+  // identify which project is currently being displayed to and edited by the user
+  let currentDOMProjectID;
+  const getCurrentDOMProject = () => {
+    if (projectModule.projects.id.includes(currentDOMProjectID)) {
+      let projectIndex = projectModule.projects.indexOf(currentDOMProjectID);
       return projectModule.projects[projectIndex];
     } else {
       console.log("Project not found. Something went wrong.");
@@ -26,27 +26,68 @@ const UIController = (() => {
 
   const populateCardSectionByProject = (project) => {
     clearCardsSection();
-    const cardSectionHeader = document.querySelector(".content-header");
-
+    projectModule.setAllImportantTasksView(false);
+    projectModule.setAllTasksTodayView(false);
+    projectModule.setAllTasksView(false);
     cardSectionHeader.textContent = project.name;
     project.taskList.forEach((task) => {
       createNewTaskCard(task, project);
     });
   };
 
-  // UNDER CONSTRUCTION - how do we want to sort through all of the projects, and display all of those due today?
+  // UNDER CONSTRUCTION - how do we want to sort through all of the projects, and display all of those overdue or due today?
   const todayBtn = document.getElementById("today-btn");
   todayBtn.addEventListener("click", () => {
-    if (!projectModule.checkAllTasksTodayView) {
+    handleAllTasksTodayDisplay();
+  });
+  const handleAllTasksTodayDisplay = () => {
+    if (!projectModule.checkAllTasksTodayView()) {
       projectModule.setAllTasksTodayView(true);
       projectModule.setAllTasksView(false);
       projectModule.setAllImportantTasksView(false);
+      clearCardsSection();
+      cardSectionHeader.textContent = `Today's Tasks`;
+      const allTodayTasks = projectModule.getAllTodayTasks();
+      allTodayTasks.forEach((task) => {
+        createNewTaskCard(task);
+      });
     }
-  });
-  // UNDER CONSTRUCTION - how do we want to sort through all of the projects, and display all?
+  };
+
   const allBtn = document.getElementById("all-btn");
-  // UNDER CONSTRUCTION - how do we want to sort through all of the projects, and display all of those marked important?
+  allBtn.addEventListener("click", () => {
+    handleAllTasksDisplay();
+  });
+  const handleAllTasksDisplay = () => {
+    if (!projectModule.checkAllTasksView()) {
+      projectModule.setAllTasksTodayView(false);
+      projectModule.setAllTasksView(true);
+      projectModule.setAllImportantTasksView(false);
+      clearCardsSection();
+      cardSectionHeader.textContent = "All Tasks";
+      const allTasks = projectModule.getAllTasks();
+      allTasks.forEach((task) => {
+        createNewTaskCard(task);
+      });
+    }
+  };
   const importantBtn = document.getElementById("important-btn");
+  importantBtn.addEventListener("click", () => {
+    handleImportantTasksDisplay();
+  });
+  const handleImportantTasksDisplay = () => {
+    if (!projectModule.checkAllImportantTasksView()) {
+      projectModule.setAllTasksTodayView(false);
+      projectModule.setAllTasksView(false);
+      projectModule.setAllImportantTasksView(true);
+      clearCardsSection();
+      cardSectionHeader.textContent = "Important Tasks";
+      const importantTasks = projectModule.getAllImportantTasks();
+      importantTasks.forEach((task) => {
+        createNewTaskCard(task);
+      });
+    }
+  };
 
   // create new tasks
   const createNewTask = (
@@ -57,7 +98,7 @@ const UIController = (() => {
       "yyyy-MM-dd"
     ),
     newTaskPriority = document.querySelector("#task-priority").value,
-    project = getCurrentDOMProjectValue()
+    project = getCurrentDOMProject()
   ) => {
     let newTask = taskModule.createTask(
       newTaskTitle,
@@ -77,6 +118,7 @@ const UIController = (() => {
   // we can use this for new task cards and for editing them
   const populateTaskCard = (popTask, popTaskCard, project) => {
     popTaskCard.innerHTML = "";
+    popTaskCard.id = popTask.id;
     popTaskCard.setAttribute("class", `task-card ${popTask.priority}`);
     // using creating elements instead of innerHTML to allow for easier editing of the task cards
     let newTaskHeaderDiv = document.createElement("div");
@@ -112,16 +154,18 @@ const UIController = (() => {
     let newTaskWriteImg = document.createElement("img");
     newTaskWriteImg.classList.add("img-write");
     newTaskWriteImg.src = writeImgSrc;
-    newTaskWriteImg.addEventListener("click", () => {
-      handleEditTask(popTask, popTaskCard);
+    newTaskWriteImg.addEventListener("click", (e) => {
+      if (e.target.matches(".img-write")) {
+        handleEditTask(popTask, popTaskCard);
+      }
     });
     let newTrashImg = document.createElement("img");
     newTrashImg.classList.add("img-trash");
     newTrashImg.src = trashImgSrc;
-    newTrashImg.addEventListener("click", () => {
-      handleDeleteTask(popTask, popTaskCard, project);
-      console.log(currentDOMProject);
-      console.log(project);
+    newTrashImg.addEventListener("click", (e) => {
+      if (e.target.matches(".img-trash")) {
+        handleDeleteTask(popTask, popTaskCard, project);
+      }
     });
     imgContainer.appendChild(newTaskWriteImg);
     imgContainer.appendChild(newTrashImg);
@@ -156,8 +200,9 @@ const UIController = (() => {
   closeBtn.addEventListener("click", () => taskModal.close());
 
   submitTaskModalBtn.addEventListener("click", () => {
+    // commenting out while we make a few adjustments. try catch will be included in final product
     // try {
-    createNewTaskCard(createNewTask(), getCurrentDOMProjectValue());
+    createNewTaskCard(createNewTask(), getCurrentDOMProject());
     taskModal.close();
     // } catch {
     //   alert("Task Title and Date are required!");
@@ -280,7 +325,7 @@ const UIController = (() => {
     previousTaskCard,
     previousHTML,
     previousTask,
-    project = getCurrentDOMProjectValue()
+    project = getCurrentDOMProject()
   ) => {
     previousTaskCard.innerHTML = previousHTML;
     // using innerHTML loses the event listeners, so we need to get them back
@@ -299,8 +344,9 @@ const UIController = (() => {
   };
 
   const handleDeleteTask = (task, taskCard, project) => {
-    project.removeTask(task);
+    projectModule.deleteTaskFromProject(project.id, task);
     tasksSection.removeChild(taskCard);
+    currentDOMProjectID = project.id;
   };
 
   // project modal
@@ -334,11 +380,6 @@ const UIController = (() => {
   const createNewProjectCard = (project) => {
     const newProjectCard = document.createElement("div");
     newProjectCard.classList.add("project-card");
-    // UNDER CONSTRUCTION: event listener to change view to different projects
-    newProjectCard.addEventListener("click", () => {
-      populateCardSectionByProject(project);
-      currentDOMProject = project;
-    });
     populateProjectCard(project, newProjectCard);
   };
   const submitProjectModalBtn = document.querySelector(
@@ -351,6 +392,7 @@ const UIController = (() => {
   });
   const populateProjectCard = (popProject, popProjectCard) => {
     popProjectCard.innerHTML = "";
+    popProjectCard.id = popProject.id;
     const newProjectImg = document.createElement("img");
     newProjectImg.classList.add("img-project");
     newProjectImg.setAttribute("src", `${projectImgSrc}`);
@@ -367,22 +409,30 @@ const UIController = (() => {
     newProjectEditBtn.classList.add("edit-btn");
     newProjectEditBtn.textContent = "edit";
     newProjectFooter.appendChild(newProjectEditBtn);
-    newProjectEditBtn.addEventListener("click", () => {
-      handleEditProject(popProject, popProjectCard);
+    newProjectEditBtn.addEventListener("click", (e) => {
+      if (e.target.matches(".edit-btn")) {
+        handleEditProject(popProject, popProjectCard);
+      }
     });
     const newProjectDeleteBtn = document.createElement("div");
     newProjectDeleteBtn.classList.add("project-btn");
     newProjectDeleteBtn.classList.add("del-btn");
     newProjectDeleteBtn.textContent = "delete";
     newProjectFooter.appendChild(newProjectDeleteBtn);
-    newProjectDeleteBtn.addEventListener("click", () => {
-      handleDeleteProject(popProject, popProjectCard);
+    newProjectDeleteBtn.addEventListener("click", (e) => {
+      if (e.target.matches(".del-btn")) {
+        handleDeleteProject(popProject, popProjectCard);
+      }
     });
     projectsSection.appendChild(popProjectCard);
-    popProjectCard.addEventListener("click", () => {
-      console.log("am i firing even when the project is being deleted?");
-      populateCardSectionByProject(popProject);
-      currentDOMProject = popProject;
+    popProjectCard.addEventListener("click", (e) => {
+      if (
+        e.target.matches(".project-card") ||
+        e.target.matches(".project-title")
+      ) {
+        populateCardSectionByProject(popProject);
+        currentDOMProjectID = popProject.id;
+      }
     });
     projectInput.value = "";
   };
@@ -446,13 +496,14 @@ const UIController = (() => {
   const handleDeleteProject = (project, projectCard) => {
     projectModule.deleteProject(project);
     projectsSection.removeChild(projectCard);
-    console.log(project === currentDOMProject);
-    if (project === currentDOMProject) {
+    if (project.id === currentDOMProjectID) {
       clearCardsSection();
+      cardSectionHeader.textContent = "Your Tasks";
+      currentDOMProjectID = null;
     }
   };
 
-  // event delegation
+  // event delegation - hunt down the other event listeners, remove them, and handle them all here
   const addGlobalEventListener = (
     type,
     selector,
@@ -477,7 +528,6 @@ const UIController = (() => {
   // DEVELOPMENT AREA: these will all be removed at project conclusion
   // initial task and project cards for development example. will be removed before implementing
   let sampleProject = createNewProject("Sample Project");
-  currentDOMProject = sampleProject;
 
   let lowTaskExample = createNewTask(
     "do normal thing",
@@ -490,7 +540,7 @@ const UIController = (() => {
   let highTaskExample = createNewTask(
     "do highly important thing",
     "highly important thing description",
-    "2025-06-26",
+    "2024-06-26",
     "high",
     sampleProject
   );
@@ -498,12 +548,26 @@ const UIController = (() => {
   let mediumTaskExample = createNewTask(
     "do medium important thing",
     "",
-    "2025-06-26",
+    "2024-08-07",
     "medium",
     sampleProject
   );
 
-  populateCardSectionByProject(sampleProject);
+  let futureTaskExample = createNewTask(
+    `i'm in the future`,
+    "future description",
+    "2027-06-26",
+    "low",
+    sampleProject
+  );
+
+  let wayOverDueExample = createNewTask(
+    `i'm waaay overdue`,
+    "overdue description",
+    "2022-01-01",
+    "high",
+    sampleProject
+  );
 })();
 
 export default { UIController };
