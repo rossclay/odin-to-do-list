@@ -59,7 +59,7 @@ const createProject = (name) => {
 const deleteProject = (projectID) => {
   const index = getProjectIndex(projectID);
   if (index !== -1) {
-    lists.splice(index, 1);
+    projects.splice(index, 1);
     saveToLocalStorage(projects);
   }
 };
@@ -70,13 +70,13 @@ const updateName = (projectId, newName) => {
   saveToLocalStorage(projects);
 };
 const addTaskToProject = (projectId, task) => {
-  const list = getList(projectId);
+  const list = getProject(projectId);
   list.addTask(task);
   saveToLocalStorage(projects);
 };
 
 const deleteTaskFromProject = (projectId, task) => {
-  const list = getList(projectId);
+  const list = getProject(projectId);
   list.removeTask(task);
   saveToLocalStorage(projects);
 };
