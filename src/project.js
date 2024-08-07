@@ -17,7 +17,7 @@ class Project {
 
   removeTask(task) {
     const index = this.taskList.indexOf(task);
-    if (index < -1) {
+    if (index > -1) {
       this.taskList.splice(index, 1);
       saveToLocalStorage(projects);
     }
@@ -89,6 +89,52 @@ const getProject = (projectID) =>
 
 const getCurrentProject = () => projects.find((project) => project.selected);
 
+const getAllTasks = () => {
+  let allTasksList = [];
+  projects.forEach((project) => {
+    project.taskList.forEach((task) => {
+      allTasksList.push(task);
+    });
+  });
+  return allTasksList;
+};
+
+const getAllImportantTasks = () => {
+  let allImportantTasks = [];
+  projects.forEach((project) => {
+    project.taskList.forEach((task) => {
+      if (task.priority === "high") {
+        allImportantTasks.push(task);
+      }
+    });
+  });
+  return allImportantTasks;
+};
+
+const getTodaysDate = () => {
+  let today = new Date();
+  let dd = String(today.getDate()).padStart(2, "0");
+  let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  let yyyy = today.getFullYear();
+  today = mm + "/" + dd + "/" + yyyy;
+  return today;
+};
+
+const getAllTodayTasks = () => {
+  let allTodayTasks = [];
+  // const todayDate = Number(getTodaysDate().replaceAll("/", ""));
+  const todayDate = new Date(getTodaysDate());
+  projects.forEach((project) => {
+    project.taskList.forEach((task) => {
+      let taskDueDate = new Date(task.dueDate);
+      if (taskDueDate.getTime() <= todayDate.getTime()) {
+        allTodayTasks.push(task);
+      }
+    });
+  });
+  return allTodayTasks;
+};
+
 const setAllTasksView = (state) => (allTasksView = state);
 
 const setAllTasksTodayView = (state) => (allTasksTodayView = state);
@@ -115,4 +161,7 @@ export {
   setAllTasksView,
   setAllTasksTodayView,
   setAllImportantTasksView,
+  getAllTasks,
+  getAllImportantTasks,
+  getAllTodayTasks,
 };
