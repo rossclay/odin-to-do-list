@@ -4,8 +4,8 @@
 
 Tasks are locally saved using localStorage module. Currently still implementing basic project functionality. This README is currently serving as a pseudo to-do list for my outstanding items to get this project where I want it. Ironic!
 
-**Current task:** ability to DELETE existing tasks, ability to delete projects,
+**Current task:** localStorage module integration, tasks cannot be deleted or edited while in today's tasks, all tasks, or important tasks view
 
-**Outstanding tasks:** display all of today's tasks, display all important tasks
+**Outstanding tasks:** improve event delegation for brevity
 
-**Known Issues:** localStorage module integration, when projects are deleted, the event listener to populate the DOM with their tasks is also firing. better event delegation may solve this.
+**Known Issues:** localStorage module integration, tasks cannot be deleted or edited while in today's tasks, all tasks, or important tasks view
