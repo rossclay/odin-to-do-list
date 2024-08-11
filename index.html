@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List</title>
+  </head>
+
+  <body>
+    <header>Your To-Do List</header>
+    <div class="sidebar">
+      <div class="side-card">
+        <div class="sidebar-header">home</div>
+        <button class="task-filter-btn" id="today-btn">today</button>
+        <button class="task-filter-btn" id="all-btn">all tasks</button>
+        <button class="task-filter-btn" id="important-btn">
+          important tasks
+        </button>
+      </div>
+      <div class="side-card">
+        <div class="sidebar-header">my projects</div>
+        <button class="add-project-btn">Add Project</button>
+        <div class="side-card" id="projects-section"></div>
+        <div class="side-card">
+          <div class="project-card hide" id="project-modal">
+            <img class="img-project" />
+            <input
+              class="project-input"
+              type="text"
+              id="project-title"
+              name="project-title"
+              placeholder="project title"
+              required
+            />
+            <div class="project-footer">
+              <div class="submit-project-modal-btn">add</div>
+              <div class="cancel-project-modal-btn">cancel</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="content-header">Your Tasks</div>
+      <button class="add-task-btn hide">Add task</button>
+      <div class="card-section"></div>
+    </div>
+
+    <dialog class="task-modal">
+      <fieldset>
+        <legend>Task Information</legend>
+        <div class="form-container">
+          <div class="form-item">
+            <label for="task-title"
+              >Task Title <span aria-label="required">*</span></label
+            >
+            <input
+              class="task-input"
+              type="text"
+              id="task-title"
+              name="task-title"
+              placeholder="Daily Exercise"
+              required
+            />
+          </div>
+          <div class="form-item">
+            <label for="task-description">Task Description</label>
+            <input
+              class="task-input"
+              type="text"
+              id="task-description"
+              name="task-description"
+              placeholder="Running, free weights, etc."
+              type="text"
+            />
+          </div>
+          <div class="form-item">
+            <label for="task-date"
+              >Due date <span aria-label="required">*</span></label
+            >
+            <input type="date" id="task-date" name="task-date" required />
+          </div>
+          <div class="form-item">
+            <legend>Priority:</legend>
+            <select name="task-priority" id="task-priority">
+              <option value="high">high</option>
+              <option value="medium">medium</option>
+              <option value="low">low</option>
+            </select>
+          </div>
+        </div>
+        <button class="submit-task-modal-btn" type="button">Add</button>
+        <button class="close-modal" type="button">Close</button>
+      </fieldset>
+    </dialog>
+
+    <footer>
+      rossclay
+      <a href="https://github.com/rossclay"
+        ><ion-icon name="logo-github" class="github-logo"></ion-icon
+      ></a>
+    </footer>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+    ></script>
+  <script defer src="bundle.js"></script></body>
+</html>
