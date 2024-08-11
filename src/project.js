@@ -87,8 +87,6 @@ const getProjectIndex = (projectID) => {
 const getProject = (projectID) =>
   projects.find((project) => project.id === projectID);
 
-const getCurrentProject = () => projects.find((project) => project.selected);
-
 const getAllTasks = () => {
   let allTasksList = [];
   projects.forEach((project) => {
@@ -122,7 +120,6 @@ const getTodaysDate = () => {
 
 const getAllTodayTasks = () => {
   let allTodayTasks = [];
-  // const todayDate = Number(getTodaysDate().replaceAll("/", ""));
   const todayDate = new Date(getTodaysDate());
   projects.forEach((project) => {
     project.taskList.forEach((task) => {
@@ -153,7 +150,6 @@ export {
   addTaskToProject,
   deleteTaskFromProject,
   getProject,
-  getCurrentProject,
   getProjectForTask,
   checkAllTasksView,
   checkAllTasksTodayView,
