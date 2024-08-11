@@ -13,19 +13,32 @@ const UIController = (() => {
   // identify which project is currently being displayed to and edited by the user
   let currentDOMProjectID;
   const getCurrentDOMProject = () => {
-    if (projectModule.projects.id.includes(currentDOMProjectID)) {
-      let projectIndex = projectModule.projects.indexOf(currentDOMProjectID);
-      return projectModule.projects[projectIndex];
-    } else {
-      console.log("Project not found. Something went wrong.");
-    }
+    let currentProject = projectModule.projects.find((project) => {
+      if (project.id === currentDOMProjectID) {
+        return project;
+      }
+    });
+    return currentProject;
   };
   const clearCardsSection = () => {
     tasksSection.innerHTML = "";
   };
 
+  const hideAddTaskBtn = () => {
+    if (addTaskBtn.classList.contains("show")) {
+      addTaskBtn.setAttribute("class", "add-task-btn hide");
+    }
+  };
+
+  const showTaskBtn = () => {
+    if (addTaskBtn.classList.contains("hide")) {
+      addTaskBtn.setAttribute("class", "add-task-btn show");
+    }
+  };
+
   const populateCardSectionByProject = (project) => {
     clearCardsSection();
+    showTaskBtn();
     projectModule.setAllImportantTasksView(false);
     projectModule.setAllTasksTodayView(false);
     projectModule.setAllTasksView(false);
@@ -33,14 +46,16 @@ const UIController = (() => {
     project.taskList.forEach((task) => {
       createNewTaskCard(task, project);
     });
+    currentDOMProjectID = project.id;
   };
 
-  // UNDER CONSTRUCTION - how do we want to sort through all of the projects, and display all of those overdue or due today?
+  // Filter tasks
   const todayBtn = document.getElementById("today-btn");
   todayBtn.addEventListener("click", () => {
     handleAllTasksTodayDisplay();
   });
   const handleAllTasksTodayDisplay = () => {
+    hideAddTaskBtn();
     if (!projectModule.checkAllTasksTodayView()) {
       projectModule.setAllTasksTodayView(true);
       projectModule.setAllTasksView(false);
@@ -59,6 +74,7 @@ const UIController = (() => {
     handleAllTasksDisplay();
   });
   const handleAllTasksDisplay = () => {
+    hideAddTaskBtn();
     if (!projectModule.checkAllTasksView()) {
       projectModule.setAllTasksTodayView(false);
       projectModule.setAllTasksView(true);
@@ -76,6 +92,7 @@ const UIController = (() => {
     handleImportantTasksDisplay();
   });
   const handleImportantTasksDisplay = () => {
+    hideAddTaskBtn();
     if (!projectModule.checkAllImportantTasksView()) {
       projectModule.setAllTasksTodayView(false);
       projectModule.setAllTasksView(false);
@@ -178,6 +195,7 @@ const UIController = (() => {
   const isTaskComplete = (event, task) => {
     if (event.target.checked) {
       task.complete = true;
+      saveToLocalStorage(projectModule.projects);
       return true;
     } else {
       task.complete = false;
@@ -197,16 +215,25 @@ const UIController = (() => {
   const taskModal = document.querySelector(".task-modal");
   const submitTaskModalBtn = document.querySelector(".submit-task-modal-btn");
   addTaskBtn.addEventListener("click", () => taskModal.showModal());
-  closeBtn.addEventListener("click", () => taskModal.close());
+  closeBtn.addEventListener("click", () => {
+    clearTaskModalInputs();
+    taskModal.close();
+  });
+
+  const handleTaskModalSubmit = () => {
+    createNewTaskCard(createNewTask(), getCurrentDOMProject());
+    clearTaskModalInputs();
+    taskModal.close();
+  };
+  const clearTaskModalInputs = () => {
+    const taskModalInputs = taskModal.querySelectorAll("input");
+    taskModalInputs.forEach((taskModalInput) => {
+      taskModalInput.value = "";
+    });
+  };
 
   submitTaskModalBtn.addEventListener("click", () => {
-    // commenting out while we make a few adjustments. try catch will be included in final product
-    // try {
-    createNewTaskCard(createNewTask(), getCurrentDOMProject());
-    taskModal.close();
-    // } catch {
-    //   alert("Task Title and Date are required!");
-    // }
+    handleTaskModalSubmit();
   });
   // additional feature for closing modal when clicking outside of dialog window
   taskModal.addEventListener("click", (e) => {
@@ -217,6 +244,7 @@ const UIController = (() => {
       e.clientY < dialogDimensions.top ||
       e.clientY > dialogDimensions.bottom
     ) {
+      clearTaskModalInputs();
       taskModal.close();
     }
   });
@@ -343,10 +371,13 @@ const UIController = (() => {
     });
   };
 
-  const handleDeleteTask = (task, taskCard, project) => {
+  const handleDeleteTask = (
+    task,
+    taskCard,
+    project = projectModule.getProjectForTask(task)
+  ) => {
     projectModule.deleteTaskFromProject(project.id, task);
     tasksSection.removeChild(taskCard);
-    currentDOMProjectID = project.id;
   };
 
   // project modal
@@ -502,21 +533,6 @@ const UIController = (() => {
       currentDOMProjectID = null;
     }
   };
-
-  // event delegation - hunt down the other event listeners, remove them, and handle them all here
-  const addGlobalEventListener = (
-    type,
-    selector,
-    callback,
-    parent = document
-  ) => {
-    parent.addEventListener(type, (e) => {
-      if (e.target.matches(selector)) {
-        callback(e);
-      }
-    });
-  };
-
   // favicon
   let link = document.querySelector("link[rel~='icon']");
   if (!link) {
@@ -525,49 +541,6 @@ const UIController = (() => {
     document.head.appendChild(link);
   }
   link.href = faviconSrc;
-  // DEVELOPMENT AREA: these will all be removed at project conclusion
-  // initial task and project cards for development example. will be removed before implementing
-  let sampleProject = createNewProject("Sample Project");
-
-  let lowTaskExample = createNewTask(
-    "do normal thing",
-    "normal thing description",
-    "2025-06-26",
-    "low",
-    sampleProject
-  );
-
-  let highTaskExample = createNewTask(
-    "do highly important thing",
-    "highly important thing description",
-    "2024-06-26",
-    "high",
-    sampleProject
-  );
-
-  let mediumTaskExample = createNewTask(
-    "do medium important thing",
-    "",
-    "2024-08-07",
-    "medium",
-    sampleProject
-  );
-
-  let futureTaskExample = createNewTask(
-    `i'm in the future`,
-    "future description",
-    "2027-06-26",
-    "low",
-    sampleProject
-  );
-
-  let wayOverDueExample = createNewTask(
-    `i'm waaay overdue`,
-    "overdue description",
-    "2022-01-01",
-    "high",
-    sampleProject
-  );
 })();
 
 export default { UIController };
